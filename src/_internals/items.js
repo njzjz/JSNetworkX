@@ -7,5 +7,5 @@
  * @param {Object} obj
  * @return {!Array}
  */
-import items from 'lodash/object/pairs';
+import items from 'lodash/pairs';
 export default items;

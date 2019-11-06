@@ -1,7 +1,7 @@
 /*jshint latedef:false*/
 'use strict';
 
-import baseClone from 'lodash/internal/baseClone';
+import baseClone from 'lodash/baseClone';
 import isGraph from './isGraph';
 import isMap from './isMap';
 import isSet from './isSet';
