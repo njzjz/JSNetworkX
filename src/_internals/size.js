@@ -19,17 +19,13 @@ import objectSize from 'lodash/size';
 export default function size(obj) {
   if (isGraph(obj)) {
     return obj.numberOfNodes();
-  }
-  else if(typeof obj === 'string' || isArrayLike(obj)) {
+  } else if (typeof obj === 'string' || isArrayLike(obj)) {
     return obj.length;
-  }
-  else if(isPlainObject(obj)) {
+  } else if (isPlainObject(obj)) {
     return objectSize(obj);
-  }
-  else {
+  } else {
     throw new TypeError(
-      'Expected a graph object, array, string or object, but got %s instead',
-      typeof obj
-    );
+        'Expected a graph object, array, string or object, but got %s instead',
+        typeof obj);
   }
 }

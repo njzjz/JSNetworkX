@@ -19,10 +19,10 @@ function deepcopyInstance(obj, stackA, stackB) {
   var instance;
 
   // collect instance properties
-  for(prop in obj) {
-      if(obj.hasOwnProperty(prop)) {
-          ownProps[prop] = obj[prop];
-      }
+  for (prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      ownProps[prop] = obj[prop];
+    }
   }
 
   // deepcopy them
@@ -30,30 +30,22 @@ function deepcopyInstance(obj, stackA, stackB) {
 
   // create a new instance and assign properties
   instance = new T_();
-  for(prop in ownProps) {
-      instance[prop] = ownProps[prop];
+  for (prop in ownProps) {
+    instance[prop] = ownProps[prop];
   }
 
   return instance;
 }
 
 function deepcopyImplementation(value, stackA, stackB) {
-  return clone(
-    value,
-    true,
-    function(v) {
-      if (isMap(v) || isSet(v) || isGraph(v)) {
-        var copy = deepcopyInstance(v, stackA, stackB);
-        stackA.push(v);
-        stackB.push(copy);
-        return copy;
-      }
-    },
-    null,
-    null,
-    stackA,
-    stackB
-  );
+  return clone(value, true, function(v) {
+    if (isMap(v) || isSet(v) || isGraph(v)) {
+      var copy = deepcopyInstance(v, stackA, stackB);
+      stackA.push(v);
+      stackB.push(copy);
+      return copy;
+    }
+  }, null, null, stackA, stackB);
 }
 
 /**

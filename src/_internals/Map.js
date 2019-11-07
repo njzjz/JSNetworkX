@@ -25,7 +25,7 @@ export default class Map {
     // Can't use class syntax because of generator functions
     this._stringValues = Object.create(null); // strings
     this._numberValues = Object.create(null); // numbers
-    this._values = Object.create(null); // every other value
+    this._values = Object.create(null);       // every other value
     this._keys = Object.create(null);
 
     if (optData != null) {
@@ -33,14 +33,12 @@ export default class Map {
         for (let [key, value] of optData) {
           this.set(key, value);
         }
-      }
-      else if(isArrayLike(optData)) {
+      } else if (isArrayLike(optData)) {
         for (let i = 0; i < optData.length; i++) {
           let [key, value] = optData[i];
           this.set(key, value);
         }
-      }
-      else if (isObject(optData)) {
+      } else if (isObject(optData)) {
         for (let key in optData) {
           this.set(isNaN(+key) ? key : +key, optData[key]);
         }
@@ -57,13 +55,13 @@ export default class Map {
    */
   _getStorage(key) {
     switch (typeof key) {
-      case 'number':
-        return this._numberValues;
-      case 'string':
-        return this._stringValues;
-      default:
-        return this._values;
-      }
+    case 'number':
+      return this._numberValues;
+    case 'string':
+      return this._stringValues;
+    default:
+      return this._values;
+    }
   }
 
   /**
@@ -91,9 +89,7 @@ export default class Map {
    * @return {boolean}
    * @export
    */
-  has(key) {
-    return key in this._getStorage(key);
-  }
+  has(key) { return key in this._getStorage(key); }
 
   /**
    * Adds the value and key to the map.
@@ -141,8 +137,8 @@ export default class Map {
    *
    * @return {!Iterator}
    * @export
-  */
-  *entries() {
+   */
+  * entries() {
     var key;
     for (key in this._numberValues) {
       yield [+key, this._numberValues[key]];
@@ -160,11 +156,11 @@ export default class Map {
    *
    * @return {!Iterator}
    * @export
-  */
-  *keys() {
+   */
+  * keys() {
     var key;
     for (key in this._numberValues) {
-      yield +key;
+      yield + key;
     }
     for (key in this._stringValues) {
       yield key;
@@ -179,8 +175,8 @@ export default class Map {
    *
    * @return {!Array}
    * @export
-  */
-  *values() {
+   */
+  * values() {
     var key;
     for (key in this._numberValues) {
       yield this._numberValues[key];
@@ -198,18 +194,17 @@ export default class Map {
    *
    * @return {number}
    * @export
-  */
+   */
   get size() {
-    return size(this._values) +
-      size(this._numberValues) +
-      size(this._stringValues);
+    return size(this._values) + size(this._numberValues) +
+           size(this._stringValues);
   }
 
   /**
    * Empties the map.
    *
    * @export
-  */
+   */
   clear() {
     clear(this._stringValues);
     clear(this._numberValues);
@@ -224,7 +219,7 @@ export default class Map {
    *  argument and value as second argument.
    * @param {*=} opt_this Object/value to set this to inside the callback
    * @export
-  */
+   */
   forEach(callback, optThis) {
     if (!isFunction(callback)) {
       throw new TypeError('callback must be a function');
@@ -235,11 +230,9 @@ export default class Map {
   }
 
   /**
-  * Returns an iterator for the map object.
-  *
-  * @return {Iterator}
-  */
-  [Symbol.iterator]() {
-    return this.entries();
-  }
+   * Returns an iterator for the map object.
+   *
+   * @return {Iterator}
+   */
+  [Symbol.iterator]() { return this.entries(); }
 }
