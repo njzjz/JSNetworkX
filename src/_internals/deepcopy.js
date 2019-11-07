@@ -1,10 +1,10 @@
 /*jshint latedef:false*/
-'use strict';
+"use strict";
 
-import clone from 'lodash/clone';
-import isGraph from './isGraph';
-import isMap from './isMap';
-import isSet from './isSet';
+import clone from "lodash/clone";
+import isGraph from "./isGraph";
+import isMap from "./isMap";
+import isSet from "./isSet";
 
 function deepcopyInstance(obj, stackA, stackB) {
   // temporary constructor, we don't know if the original expects
@@ -19,10 +19,10 @@ function deepcopyInstance(obj, stackA, stackB) {
   var instance;
 
   // collect instance properties
-  for(prop in obj) {
-      if(obj.hasOwnProperty(prop)) {
-          ownProps[prop] = obj[prop];
-      }
+  for (prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      ownProps[prop] = obj[prop];
+    }
   }
 
   // deepcopy them
@@ -30,8 +30,8 @@ function deepcopyInstance(obj, stackA, stackB) {
 
   // create a new instance and assign properties
   instance = new T_();
-  for(prop in ownProps) {
-      instance[prop] = ownProps[prop];
+  for (prop in ownProps) {
+    instance[prop] = ownProps[prop];
   }
 
   return instance;

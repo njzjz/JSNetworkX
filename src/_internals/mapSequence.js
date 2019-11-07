@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-import isPlainObject from 'lodash/isPlainObject';
-import mapValues from 'lodash/mapValues';
+import isPlainObject from "lodash/isPlainObject";
+import mapValues from "lodash/mapValues";
 
-import isArrayLike from './isArrayLike';
-import isIterable from './isIterable';
-import isIterator from './isIterator';
-import mapIterator from './mapIterator';
+import isArrayLike from "./isArrayLike";
+import isIterable from "./isIterable";
+import isIterator from "./isIterator";
+import mapIterator from "./mapIterator";
 
 var nativeMap = Array.prototype.map;
 
@@ -30,20 +30,14 @@ var nativeMap = Array.prototype.map;
 export default function mapSequence(sequence, callback, thisObj) {
   if (isArrayLike(sequence)) {
     return nativeMap.call(sequence, callback, thisObj);
-  }
-  else if (isIterable(sequence)) {
+  } else if (isIterable(sequence)) {
     sequence = sequence[Symbol.iterator]();
   }
   if (isIterator(sequence)) {
     return mapIterator(sequence, callback, thisObj);
-  }
-  else if(isPlainObject(sequence)) {
+  } else if (isPlainObject(sequence)) {
     return mapValues(sequence, callback, thisObj);
-  }
-  else {
-    throw new TypeError(
-      "Can't map value of type %s",
-      typeof sequence
-    );
+  } else {
+    throw new TypeError("Can't map value of type %s", typeof sequence);
   }
 }

@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-import isArrayLike from './isArrayLike';
-import isGraph from './isGraph';
-import isPlainObject from 'lodash/isPlainObject';
-import objectSize from 'lodash/size';
+import isArrayLike from "./isArrayLike";
+import isGraph from "./isGraph";
+import isPlainObject from "lodash/isPlainObject";
+import objectSize from "lodash/size";
 
 /**
  * Returns the number of elements in the container. That is
@@ -19,16 +19,13 @@ import objectSize from 'lodash/size';
 export default function size(obj) {
   if (isGraph(obj)) {
     return obj.numberOfNodes();
-  }
-  else if(typeof obj === 'string' || isArrayLike(obj)) {
+  } else if (typeof obj === "string" || isArrayLike(obj)) {
     return obj.length;
-  }
-  else if(isPlainObject(obj)) {
+  } else if (isPlainObject(obj)) {
     return objectSize(obj);
-  }
-  else {
+  } else {
     throw new TypeError(
-      'Expected a graph object, array, string or object, but got %s instead',
+      "Expected a graph object, array, string or object, but got %s instead",
       typeof obj
     );
   }

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /**
  * This module provides functions to convert
  * NetworkX graphs to and from other formats.
@@ -9,9 +9,9 @@
  * input type and convert it automatically.
  */
 
-import * as convertMap from './contrib/convert';
-import prepCreateUsing from './contrib/prepCreateUsing';
-import _mapValues from 'lodash/mapValues';
+import * as convertMap from "./contrib/convert";
+import prepCreateUsing from "./contrib/prepCreateUsing";
+import _mapValues from "lodash/mapValues";
 
 import {
   Map,
@@ -21,7 +21,7 @@ import {
   isMap,
   isArrayLike,
   isPlainObject
-} from './_internals';
+} from "./_internals";
 
 var hasOwn = Object.prototype.hasOwnProperty;
 
@@ -61,30 +61,27 @@ var hasOwn = Object.prototype.hasOwnProperty;
 export function toNetworkxGraph(
   data,
   optCreateUsing,
-  optMultigraphInput=false
+  optMultigraphInput = false
 ) {
   var result = null;
 
   // jsnx graph
-  if (hasOwn.call(data, 'adj')) {
+  if (hasOwn.call(data, "adj")) {
     try {
       result = convertMap.fromMapOfMaps(
         data.adj,
         optCreateUsing,
         data.isMultigraph()
       );
-      if (hasOwn.call(data, 'graph') && typeof data.graph === 'object') {
+      if (hasOwn.call(data, "graph") && typeof data.graph === "object") {
         result.graph = clone(data.graph);
       }
-      if (hasOwn.call(data, 'node') && isMap(data.node)) {
+      if (hasOwn.call(data, "node") && isMap(data.node)) {
         result.node = new Map();
-        data.node.forEach(
-          (element, k) => result.node.set(k, clone(element))
-        );
+        data.node.forEach((element, k) => result.node.set(k, clone(element)));
       }
       return result;
-    }
-    catch(ex) {
+    } catch (ex) {
       throw ex;
     }
   }
@@ -92,18 +89,12 @@ export function toNetworkxGraph(
   // map of maps / lists
   if (isMap(data)) {
     try {
-      return convertMap.fromMapOfMaps(
-        data,
-        optCreateUsing,
-        optMultigraphInput
-      );
-    }
-    catch(e) {
+      return convertMap.fromMapOfMaps(data, optCreateUsing, optMultigraphInput);
+    } catch (e) {
       try {
         return convertMap.fromMapOfLists(data, optCreateUsing);
-      }
-      catch(ex) {
-        throw new Error('Map data structure cannot be converted to a graph.');
+      } catch (ex) {
+        throw new Error("Map data structure cannot be converted to a graph.");
       }
     }
   }
@@ -111,19 +102,13 @@ export function toNetworkxGraph(
   // dict of dicts / lists
   if (isPlainObject(data)) {
     try {
-      return fromDictOfDicts(
-        data,
-        optCreateUsing,
-        optMultigraphInput
-      );
-    }
-    catch(e) {
+      return fromDictOfDicts(data, optCreateUsing, optMultigraphInput);
+    } catch (e) {
       try {
         return fromDictOfLists(data, optCreateUsing);
-      }
-      catch(ex) {
+      } catch (ex) {
         throw new Error(
-          'Object data structure cannot be converted to a graph.'
+          "Object data structure cannot be converted to a graph."
         );
       }
     }
@@ -133,9 +118,8 @@ export function toNetworkxGraph(
   if (isArrayLike(data)) {
     try {
       return fromEdgelist(data, optCreateUsing);
-    }
-    catch(e) {
-      throw new Error('Input is not a valid edge list');
+    } catch (e) {
+      throw new Error("Input is not a valid edge list");
     }
   }
 
@@ -183,8 +167,7 @@ export function toDictOfLists(G, optNodelist) {
     contains = function(n) {
       return optNodelist.hasNode(n);
     };
-  }
-  else {
+  } else {
     optNodelist = Array.from(optNodelist);
   }
 
@@ -216,15 +199,17 @@ export function fromDictOfLists(d, optCreateUsing) {
   var G = prepCreateUsing(optCreateUsing);
 
   // Convert numeric property names to numbers
-  G.addNodesFrom((function*() {
-    for (var n in d) {
-      yield isNaN(n) ? n : +n;
-    }
-  })());
+  G.addNodesFrom(
+    (function*() {
+      for (var n in d) {
+        yield isNaN(n) ? n : +n;
+      }
+    })()
+  );
 
   var node;
   var nbrlist;
-  if(G.isMultigraph() && !G.isDirected()) {
+  if (G.isMultigraph() && !G.isDirected()) {
     // a dict_of_lists can't show multiedges.  BUT for undirected graphs,
     // each edge shows up twice in the dict_of_lists.
     // So we need to treat this case separately.
@@ -242,8 +227,7 @@ export function fromDictOfLists(d, optCreateUsing) {
       });
       seen.add(node); // don't allow reverse edge to show up
     }
-  }
-  else {
+  } else {
     var edgeList = [];
     for (node in d) {
       nbrlist = d[node];
@@ -278,7 +262,7 @@ export function toDictOfDicts(G, optNodelist, optEdgeData) {
 
   if (optNodelist != null) {
     optNodelist = Array.from(optNodelist);
-    if(optEdgeData != null) {
+    if (optEdgeData != null) {
       optNodelist.forEach(function(u) {
         dod[u] = {};
         G.get(u).forEach(function(data, v) {
@@ -287,8 +271,8 @@ export function toDictOfDicts(G, optNodelist, optEdgeData) {
           }
         });
       });
-    }
-    else { // nodelist and edgeData are defined
+    } else {
+      // nodelist and edgeData are defined
       optNodelist.forEach(function(u) {
         dod[u] = {};
         G.get(u).forEach(function(data, v) {
@@ -298,9 +282,9 @@ export function toDictOfDicts(G, optNodelist, optEdgeData) {
         });
       });
     }
-  }
-  else { // nodelist is undefined
-    if(optEdgeData != null) {
+  } else {
+    // nodelist is undefined
+    if (optEdgeData != null) {
       // dn = [nbrdict, u]
       for (let [nbrdict, u] of G.adjacencyIter()) {
         /*jshint loopfunc:true*/
@@ -308,8 +292,8 @@ export function toDictOfDicts(G, optNodelist, optEdgeData) {
           return optEdgeData;
         });
       }
-    }
-    else { // edge_data is defined
+    } else {
+      // edge_data is defined
       // dn = [nbrdict, u]
       for (let [nbrdict, u] of G.adjacencyIter()) {
         dod[u] = clone(nbrdict);
@@ -344,16 +328,18 @@ export function toDictOfDicts(G, optNodelist, optEdgeData) {
  *
  * @return {Graph}
  */
-export function fromDictOfDicts(d, optCreateUsing, optMultigraphInput=false) {
+export function fromDictOfDicts(d, optCreateUsing, optMultigraphInput = false) {
   var G = prepCreateUsing(optCreateUsing);
   var seen = new Set();
 
   // Convert numeric property names to numbers
-  G.addNodesFrom((function*() {
-    for (var n in d) {
-      yield isNaN(n) ? n : +n;
-    }
-  })());
+  G.addNodesFrom(
+    (function*() {
+      for (var n in d) {
+        yield isNaN(n) ? n : +n;
+      }
+    })()
+  );
 
   // is dict a MultiGraph or MultiDiGraph?
   if (optMultigraphInput) {
@@ -361,8 +347,9 @@ export function fromDictOfDicts(d, optCreateUsing, optMultigraphInput=false) {
     if (G.isDirected()) {
       for (let u in d) {
         let nbrs = d[u];
-        if(isArrayLike(nbrs)) { // throw exception of not dict (object)
-          throw new TypeError('Inner object seems to be an array');
+        if (isArrayLike(nbrs)) {
+          // throw exception of not dict (object)
+          throw new TypeError("Inner object seems to be an array");
         }
         // treat numeric keys like numbers
         u = isNaN(u) ? u : +u;
@@ -373,20 +360,20 @@ export function fromDictOfDicts(d, optCreateUsing, optMultigraphInput=false) {
           for (let key in datadict) {
             if (G.isMultigraph()) {
               G.addEdge(u, v, key, datadict[key]);
-            }
-            else {
+            } else {
               G.addEdge(u, v, datadict[key]);
             }
           }
         }
       }
-    }
-    else { // undirected
+    } else {
+      // undirected
       // don't add both directions of undirected graph
       for (let u in d) {
         let nbrs = d[u];
-        if(isArrayLike(nbrs)) { // throw exception of not dict (object)
-          throw new TypeError('Inner object seems to be an array');
+        if (isArrayLike(nbrs)) {
+          // throw exception of not dict (object)
+          throw new TypeError("Inner object seems to be an array");
         }
         // treat numeric keys like numbers
         u = isNaN(u) ? u : +u;
@@ -394,12 +381,11 @@ export function fromDictOfDicts(d, optCreateUsing, optMultigraphInput=false) {
           let datadict = nbrs[v];
           // treat numeric keys like numbers
           v = isNaN(v) ? v : +v;
-          if(!seen.has([u, v])) {
+          if (!seen.has([u, v])) {
             for (let key in datadict) {
               if (G.isMultigraph()) {
                 G.addEdge(u, v, key, datadict[key]);
-              }
-              else {
+              } else {
                 G.addEdge(u, v, datadict[key]);
               }
             }
@@ -408,16 +394,17 @@ export function fromDictOfDicts(d, optCreateUsing, optMultigraphInput=false) {
         }
       }
     }
-  }
-  else { // not a multigraph to multigraph transfer
-    if(G.isMultigraph() && !G.isDirected()) {
+  } else {
+    // not a multigraph to multigraph transfer
+    if (G.isMultigraph() && !G.isDirected()) {
       // d can have both representations u-v, v-u in dict.  Only add one.
       // We don't need this check for digraphs since we add both directions,
       // or for Graph() since it is done implicitly (parallel edges not allowed)
       for (let u in d) {
         let nbrs = d[u];
-        if(isArrayLike(nbrs)) { // throw exception of not dict (object)
-          throw new TypeError('Inner object seems to be an array');
+        if (isArrayLike(nbrs)) {
+          // throw exception of not dict (object)
+          throw new TypeError("Inner object seems to be an array");
         }
         // treat numeric keys like numbers
         u = isNaN(u) ? u : +u;
@@ -430,12 +417,12 @@ export function fromDictOfDicts(d, optCreateUsing, optMultigraphInput=false) {
           }
         }
       }
-    }
-    else {
+    } else {
       for (let u in d) {
         let nbrs = d[u];
-        if(isArrayLike(nbrs)) { // throw exception of not dict (object)
-          throw new TypeError('Inner object seems to be an array');
+        if (isArrayLike(nbrs)) {
+          // throw exception of not dict (object)
+          throw new TypeError("Inner object seems to be an array");
         }
         // treat numeric keys like numbers
         u = isNaN(u) ? u : +u;
@@ -462,12 +449,10 @@ export function fromDictOfDicts(d, optCreateUsing, optMultigraphInput=false) {
 export function toEdgelist(G, optNodelist) {
   if (optNodelist != null) {
     return G.edges(optNodelist, true);
-  }
-  else {
+  } else {
     return G.edges(null, true);
   }
 }
-
 
 /**
  * Return a graph from a list of edges.
@@ -482,7 +467,6 @@ export function fromEdgelist(edgelist, optCreateUsing) {
   G.addEdgesFrom(edgelist);
   return G;
 }
-
 
 // NOT IMPLEMENTED
 
