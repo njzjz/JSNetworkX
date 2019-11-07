@@ -1,10 +1,10 @@
 /*jshint latedef:false*/
-'use strict';
+"use strict";
 
-import clone from 'lodash/clone';
-import isGraph from './isGraph';
-import isMap from './isMap';
-import isSet from './isSet';
+import clone from "lodash/clone";
+import isGraph from "./isGraph";
+import isMap from "./isMap";
+import isSet from "./isSet";
 
 function deepcopyInstance(obj, stackA, stackB) {
   // temporary constructor, we don't know if the original expects
@@ -38,14 +38,22 @@ function deepcopyInstance(obj, stackA, stackB) {
 }
 
 function deepcopyImplementation(value, stackA, stackB) {
-  return clone(value, true, function(v) {
-    if (isMap(v) || isSet(v) || isGraph(v)) {
-      var copy = deepcopyInstance(v, stackA, stackB);
-      stackA.push(v);
-      stackB.push(copy);
-      return copy;
-    }
-  }, null, null, stackA, stackB);
+  return clone(
+    value,
+    true,
+    function(v) {
+      if (isMap(v) || isSet(v) || isGraph(v)) {
+        var copy = deepcopyInstance(v, stackA, stackB);
+        stackA.push(v);
+        stackB.push(copy);
+        return copy;
+      }
+    },
+    null,
+    null,
+    stackA,
+    stackB
+  );
 }
 
 /**

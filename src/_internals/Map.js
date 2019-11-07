@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 /**
  * @fileoverview
  * A shim for ES6 maps and support for custom hash functions via toString()
  * and does not accept arrays as keys (just like Python does not accept lists).
  */
 
-import clear from './clear';
-import isIterable from './isIterable';
-import isFunction from 'lodash/isFunction';
-import isObject from 'lodash/isObject';
-import isArrayLike from './isArrayLike';
-import size from 'lodash/size';
+import clear from "./clear";
+import isIterable from "./isIterable";
+import isFunction from "lodash/isFunction";
+import isObject from "lodash/isObject";
+import isArrayLike from "./isArrayLike";
+import size from "lodash/size";
 
 export default class Map {
   /**
@@ -25,7 +25,7 @@ export default class Map {
     // Can't use class syntax because of generator functions
     this._stringValues = Object.create(null); // strings
     this._numberValues = Object.create(null); // numbers
-    this._values = Object.create(null);       // every other value
+    this._values = Object.create(null); // every other value
     this._keys = Object.create(null);
 
     if (optData != null) {
@@ -55,12 +55,12 @@ export default class Map {
    */
   _getStorage(key) {
     switch (typeof key) {
-    case 'number':
-      return this._numberValues;
-    case 'string':
-      return this._stringValues;
-    default:
-      return this._values;
+      case "number":
+        return this._numberValues;
+      case "string":
+        return this._stringValues;
+      default:
+        return this._values;
     }
   }
 
@@ -89,7 +89,9 @@ export default class Map {
    * @return {boolean}
    * @export
    */
-  has(key) { return key in this._getStorage(key); }
+  has(key) {
+    return key in this._getStorage(key);
+  }
 
   /**
    * Adds the value and key to the map.
@@ -138,7 +140,7 @@ export default class Map {
    * @return {!Iterator}
    * @export
    */
-  * entries() {
+  *entries() {
     var key;
     for (key in this._numberValues) {
       yield [+key, this._numberValues[key]];
@@ -157,10 +159,10 @@ export default class Map {
    * @return {!Iterator}
    * @export
    */
-  * keys() {
+  *keys() {
     var key;
     for (key in this._numberValues) {
-      yield + key;
+      yield +key;
     }
     for (key in this._stringValues) {
       yield key;
@@ -176,7 +178,7 @@ export default class Map {
    * @return {!Array}
    * @export
    */
-  * values() {
+  *values() {
     var key;
     for (key in this._numberValues) {
       yield this._numberValues[key];
@@ -196,8 +198,9 @@ export default class Map {
    * @export
    */
   get size() {
-    return size(this._values) + size(this._numberValues) +
-           size(this._stringValues);
+    return (
+      size(this._values) + size(this._numberValues) + size(this._stringValues)
+    );
   }
 
   /**
@@ -222,7 +225,7 @@ export default class Map {
    */
   forEach(callback, optThis) {
     if (!isFunction(callback)) {
-      throw new TypeError('callback must be a function');
+      throw new TypeError("callback must be a function");
     }
     for (var v of this.entries()) {
       callback.call(optThis, v[1], v[0], this);
@@ -234,5 +237,7 @@ export default class Map {
    *
    * @return {Iterator}
    */
-  [Symbol.iterator]() { return this.entries(); }
+  [Symbol.iterator]() {
+    return this.entries();
+  }
 }
