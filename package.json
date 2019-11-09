@@ -1,6 +1,6 @@
 {
-  "name": "jsnetworkx",
-  "version": "0.3.4",
+  "name": "@njzjz/jsnetworkx",
+  "version": "0.3.5",
   "description": "A graph processing and visualization library for JavaScript (port of NetworkX for Python).",
   "license": "BSD-3-Clause",
   "keywords": [
